@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      MONGODB_URI: "${MONGODB_URI}"
+      BACKEND_PORT: "${BACKEND_PORT}"
+      DATABASE: "${DATABASE}"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${VITE_FRONTEND_PORT}:${VITE_FRONTEND_PORT}"
+    environment:
+      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
+      VITE_FRONTEND_PORT: "${VITE_FRONTEND_PORT}"
+    depends_on:
+      - backend
