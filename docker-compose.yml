@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./backend
+    container_name: brew-review-backend
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - DATABASE=${DATABASE}
+      - PORT=${BACKEND_PORT}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+    container_name: brew-review-frontend
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - PORT=${FRONTEND_PORT}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: brew-review-network
